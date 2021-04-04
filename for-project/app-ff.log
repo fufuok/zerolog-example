@@ -1,0 +1,12 @@
+01:10:58 DBG main.go:138 > test DEBUG
+01:10:58 INF main.go:139 > test INFO
+01:10:58 WRN main.go:140 > test WARN HOOK=true
+01:10:58 ERR main.go:143 > test ERROR with Field error="fake error" HOOK=true k1=123
+01:10:58 INF main.go:147 > >>>test LogSampled: 0
+01:10:58 INF main.go:147 > >>>test LogSampled: 1
+01:10:58 INF main.go:147 > >>>test LogSampled: 2
+01:10:59 INF main.go:147 > >>>test LogSampled: 5
+01:10:59 INF main.go:147 > >>>test LogSampled: 6
+01:10:59 INF main.go:147 > >>>test LogSampled: 7
+01:11:00 WRN main.go:151 > test LogSubDemo HOOK=true Prefix=["***","FUFU","***"] dur.us=3000
+01:11:00 INF main.go:153 > test TimeDiff cost=2010
