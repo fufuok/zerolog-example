@@ -52,8 +52,13 @@ func init() {
 		os.Exit(1)
 	}
 
-	// 日志格式规范, 路径脱敏
-	zerolog.MessageFieldName = "msg"
+	// 路径脱敏, 日志格式规范, 避免与自定义字段名冲突: {"E":"is Err(error)","error":"is Str(error)"}
+	zerolog.TimestampFieldName = "T"
+	zerolog.LevelFieldName = "L"
+	zerolog.MessageFieldName = "M"
+	zerolog.ErrorFieldName = "E"
+	zerolog.CallerFieldName = "F"
+	zerolog.ErrorStackFieldName = "S"
 	zerolog.DurationFieldInteger = true
 	zerolog.CallerMarshalFunc = func(file string, line int) string {
 		return filepath.Base(file) + ":" + strconv.Itoa(line)
@@ -143,6 +148,11 @@ func main() {
 
 	err := errors.New("fake error")
 	Log.Error().Err(err).Int("k1", 123).Msg("test ERROR with Field")
+
+	// {"L":"error","E":"fake error","error":"my error msg",
+	// "T":"2021-04-06T16:00:27+08:00","F":"main.go:153","HOOK":true,"M":"test ERROR json.key"}
+	Log.Error().Err(err).Str("error", "my error msg").Msg("test ERROR json.key")
+
 	// Log.Fatal().Err(err).Send()
 
 	for i := 0; i < 10; i++ {

@@ -11,6 +11,7 @@ import (
 
 	"github.com/natefinch/lumberjack"
 	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 )
 
 // 示例配置
@@ -50,9 +51,7 @@ func init() {
 		os.Exit(1)
 	}
 
-	// 日志格式规范, 路径脱敏
-	zerolog.MessageFieldName = "msg"
-	zerolog.DurationFieldInteger = true
+	// 路径脱敏
 	zerolog.CallerMarshalFunc = func(file string, line int) string {
 		return filepath.Base(file) + ":" + strconv.Itoa(line)
 	}
@@ -112,6 +111,17 @@ func main() {
 
 	err := errors.New("fake error")
 	Log.Error().Err(err).Int("k1", 123).Msg("test ERROR with Field")
+
+	// 注意:
+	// 1. 文本格式时, 相同字段名会被覆盖
+	// 16:21:46 ERR basic.go:118 > test ERROR json.key error="my error msg"
+	Log.Error().Err(err).Str("error", "my error msg").Msg("test ERROR json.key")
+
+	// 2. JSON 格式时, 相同字段名不会被覆盖 (建议自定义字段名解决, 见 for-project)
+	// {"level":"error","error":"fake error","error":"my error msg",
+	// "time":"2021-04-06T16:21:46+08:00","message":"test ERROR json.key"}
+	log.Error().Err(err).Str("error", "my error msg").Msg("test ERROR json.key")
+
 	// Log.Fatal().Err(err).Send()
 
 	for i := 0; i < 10; i++ {
