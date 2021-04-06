@@ -4,7 +4,6 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"io"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -30,8 +29,7 @@ const (
 	LogBurst  = 3
 
 	// 日志级别: -1Trace 0Debug 1Info 2Warn 3Error(默认) 4Fatal 5Panic 6NoLevel 7Off
-	LogLevel     = 0
-	LogHookLevel = 2
+	LogLevel = 0
 )
 
 var (
@@ -81,17 +79,12 @@ func InitLogger() error {
 }
 
 // 加载日志配置
+// 1. 开发环境时, 日志高亮输出到控制台
+// 2. 生产环境时, 日志输出到文件(可选关闭高亮, 保存最近 10 个 30 天内的日志)
 func LogConfig() error {
-	var (
-		writers  []io.Writer
-		basicLog = zerolog.ConsoleWriter{Out: os.Stdout, TimeFormat: "15:04:05"}
-	)
+	basicLog := zerolog.ConsoleWriter{Out: os.Stdout, TimeFormat: "15:04:05"}
 
-	if Debug {
-		// 1. 开发环境时, 日志高亮输出到控制台
-		writers = []io.Writer{basicLog}
-	} else {
-		// 2. 生产环境时, 日志输出到文件(可选关闭高亮, 保存最近 10 个 30 天内的日志), 并发送 JSON 日志到 ES
+	if !Debug {
 		basicLog.NoColor = NoColor
 		basicLog.Out = &lumberjack.Logger{
 			Filename:   LogFileName,
@@ -101,36 +94,12 @@ func LogConfig() error {
 			MaxAge:     LogFileMaxAge,
 			Compress:   true,
 		}
-		writers = []io.Writer{basicLog, NewESWriter()}
 	}
 
-	Log = zerolog.New(zerolog.MultiLevelWriter(writers...)).With().Timestamp().Caller().Logger()
-	Log = Log.Hook(logHookDemo{}).Level(LogLevel)
+	Log = zerolog.New(basicLog).With().Timestamp().Caller().Logger()
+	Log = Log.Level(LogLevel)
 
 	return nil
-}
-
-// Hook 示例
-type logHookDemo struct{}
-
-func (h logHookDemo) Run(e *zerolog.Event, level zerolog.Level, msg string) {
-	if level >= LogHookLevel {
-		e.Bool("HOOK", true)
-	}
-}
-
-// 自定义日志接收器
-type ESWriter struct {
-}
-
-func NewESWriter() *ESWriter {
-	return &ESWriter{}
-}
-
-// 发送日志到 ES
-func (w *ESWriter) Write(p []byte) (n int, err error) {
-	fmt.Print("__TO_ES_:", string(p))
-	return len(p), nil
 }
 
 func main() {

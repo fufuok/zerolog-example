@@ -1,0 +1,12 @@
+[90m13:32:20[0m [33mDBG[0m [1mbasic.go:109[0m[36m >[0m test DEBUG
+[90m13:32:20[0m [32mINF[0m [1mbasic.go:110[0m[36m >[0m test INFO
+[90m13:32:20[0m [31mWRN[0m [1mbasic.go:111[0m[36m >[0m test WARN
+[90m13:32:20[0m [1m[31mERR[0m[0m [1mbasic.go:114[0m[36m >[0m test ERROR with Field [31merror=[0m[31m"fake error"[0m [36mk1=[0m123
+[90m13:32:20[0m [32mINF[0m [1mbasic.go:118[0m[36m >[0m >>>test LogSampled: 0
+[90m13:32:20[0m [32mINF[0m [1mbasic.go:118[0m[36m >[0m >>>test LogSampled: 1
+[90m13:32:20[0m [32mINF[0m [1mbasic.go:118[0m[36m >[0m >>>test LogSampled: 2
+[90m13:32:21[0m [32mINF[0m [1mbasic.go:118[0m[36m >[0m >>>test LogSampled: 5
+[90m13:32:21[0m [32mINF[0m [1mbasic.go:118[0m[36m >[0m >>>test LogSampled: 6
+[90m13:32:21[0m [32mINF[0m [1mbasic.go:118[0m[36m >[0m >>>test LogSampled: 7
+[90m13:32:22[0m [31mWRN[0m [1mbasic.go:122[0m[36m >[0m test LogSubDemo [36mPrefix=[0m["***","FUFU","***"] [36mdur.us=[0m3000
+[90m13:32:22[0m [32mINF[0m [1mbasic.go:124[0m[36m >[0m test TimeDiff [36mcost=[0m2011
