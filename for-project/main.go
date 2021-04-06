@@ -96,9 +96,9 @@ func LogConfig() error {
 		basicLog.Out = &lumberjack.Logger{
 			Filename:   LogFileName,
 			MaxSize:    LogFileMaxSize,
+			MaxAge:     LogFileMaxAge,
 			MaxBackups: LogFileMaxBackups,
 			LocalTime:  true,
-			MaxAge:     LogFileMaxAge,
 			Compress:   true,
 		}
 		writers = []io.Writer{basicLog, NewESWriter()}
