@@ -72,11 +72,16 @@ func InitLogger() error {
 	}
 
 	// 抽样的日志记录器
+	sampler := &zerolog.BurstSampler{
+		Burst:  LogBurst,
+		Period: LogPeriod,
+	}
 	LogSampled = Log.Sample(&zerolog.LevelSampler{
-		InfoSampler: &zerolog.BurstSampler{
-			Burst:  LogBurst,
-			Period: LogPeriod,
-		},
+		TraceSampler: sampler,
+		DebugSampler: sampler,
+		InfoSampler:  sampler,
+		WarnSampler:  sampler,
+		ErrorSampler: sampler,
 	})
 
 	// 子记录器
