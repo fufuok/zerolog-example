@@ -1,9 +1,10 @@
 module github.com/fufuok/zerolog-example
 
-go 1.16
+go 1.14
 
 require (
-	github.com/natefinch/lumberjack v2.0.0+incompatible
-	github.com/rs/zerolog v1.21.0
-	//gopkg.in/natefinch/lumberjack.v2 v2.0.0 // indirect
+	github.com/BurntSushi/toml v1.0.0 // indirect
+	github.com/rs/zerolog v1.26.1
+	gopkg.in/natefinch/lumberjack.v2 v2.0.0
+	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
