@@ -9,27 +9,27 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/natefinch/lumberjack"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 // 示例配置
 const (
-	// 文件日志
+	// LogFileName 文件日志
 	LogFileName = "./app-ff.log"
-	// 每个日志文件最大 MB
+	// LogFileMaxSize 每个日志文件最大 MB
 	LogFileMaxSize = 100
-	// 保留日志文件个数
+	// LogFileMaxBackups 保留日志文件个数
 	LogFileMaxBackups = 10
-	// 保留日志最大天数
+	// LogFileMaxAge 保留日志最大天数
 	LogFileMaxAge = 30
 
-	// LogSampled 配置: 每 1 秒最多输出 3 条日志
+	// LogPeriod LogSampled 配置: 每 1 秒最多输出 3 条日志
 	LogPeriod = time.Second
 	LogBurst  = 3
 
-	// 日志级别: -1Trace 0Debug 1Info 2Warn 3Error(默认) 4Fatal 5Panic 6NoLevel 7Off
+	// LogLevel 日志级别: -1Trace 0Debug 1Info 2Warn 3Error(默认) 4Fatal 5Panic 6NoLevel 7Off
 	LogLevel = 0
 )
 
@@ -57,7 +57,7 @@ func init() {
 	}
 }
 
-// 配置热加载等场景调用, 重载日志环境
+// InitLogger 配置热加载等场景调用, 重载日志环境
 func InitLogger() error {
 	if err := LogConfig(); err != nil {
 		return err
@@ -77,7 +77,7 @@ func InitLogger() error {
 	return nil
 }
 
-// 加载日志配置
+// LogConfig 加载日志配置
 // 1. 开发环境时, 日志高亮输出到控制台
 // 2. 生产环境时, 日志输出到文件(可选关闭高亮, 保存最近 10 个 30 天内的日志)
 func LogConfig() error {
