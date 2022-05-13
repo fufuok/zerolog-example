@@ -111,7 +111,7 @@ func LogConfig() error {
 			LocalTime:  true,
 			Compress:   true,
 		}
-		writers = []io.Writer{basicLog, NewESWriter()}
+		writers = []io.Writer{basicLog, NewESWriter(zerolog.WarnLevel)}
 	}
 
 	Log = zerolog.New(zerolog.MultiLevelWriter(writers...)).With().Timestamp().Caller().Logger()
@@ -130,16 +130,28 @@ func (h logHookDemo) Run(e *zerolog.Event, level zerolog.Level, msg string) {
 }
 
 // ESWriter 自定义日志接收器
+// 只接收指定级别及以上日志
 type ESWriter struct {
+	lv zerolog.Level
 }
 
-func NewESWriter() *ESWriter {
-	return &ESWriter{}
+func NewESWriter(lv zerolog.Level) *ESWriter {
+	return &ESWriter{
+		lv: lv,
+	}
 }
 
-// 发送日志到 ES
+// Write 发送日志到 ES
 func (w *ESWriter) Write(p []byte) (n int, err error) {
 	fmt.Print("__TO_ES_:", string(p))
+	return len(p), nil
+}
+
+// WriteLevel 日志级别过滤
+func (w *ESWriter) WriteLevel(l zerolog.Level, p []byte) (n int, err error) {
+	if l >= w.lv {
+		return w.Write(p)
+	}
 	return len(p), nil
 }
 

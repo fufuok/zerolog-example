@@ -7,6 +7,7 @@
 1. 开发环境时, 日志高亮输出到控制台
 2. 生产环境时, 日志输出到文件(可选关闭高亮, 保存最近 10 个 30 天内的日志), 并发送 JSON 日志到 ES
 3. 适应配置热加载时更新日志输出模式和日志级别
+4. 路径脱敏, 不同级别日志输出到不同文件或设备, Hook, Stacktrace等示例
 
 ## 效果
 
@@ -67,6 +68,11 @@ __TO_ES_:{"L":"info","cost":2013,"T":"2021-04-06T16:05:16+08:00","F":"main.go:16
 16:05:16 INF main.go:165 > test TimeDiff cost=2013
 ```
 
+### 其他
+
+- [caller/main.go](caller/main.go)
+- [stacktrace/main.go](stacktrace/main.go)
+- [level-writer/main.go](level-writer/main.go)
 
 
 
