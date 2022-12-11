@@ -43,7 +43,7 @@ var (
 )
 
 func init() {
-	flag.BoolVar(&Debug, "debug", false, "true 控制台日志, false 文件记录日志")
+	flag.BoolVar(&Debug, "debug", true, "true 控制台日志, false 文件记录日志")
 	flag.BoolVar(&NoColor, "nocolor", false, "生产环境中文本格式日志是否关闭高亮")
 	flag.Parse()
 
@@ -174,6 +174,7 @@ func main() {
 
 	for i := 0; i < 10; i++ {
 		LogSampled.Info().Msgf(">>>test LogSampled: %d", i)
+		Log.Info().Msgf("***test Log: %d", i)
 		time.Sleep(200 * time.Millisecond)
 	}
 
